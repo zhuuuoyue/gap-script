@@ -1,27 +1,5 @@
 import { Parameter } from "./parameter";
 
-export type ModuleName = ""
-    | "JrnWdt"
-    | "JrnCmd"
-    | "JrnDbg";
-export type LineType = ""
-    | "Empty"
-    | "Comment"
-    | "MousePress"
-    | "MouseRelease"
-    | "MouseDoubleClick"
-    | "KeyDown"
-    | "KeyUp"
-    | "KeyPress"
-    | "EditText"
-    | "ProcessCommand"
-    | "MouseMove"
-    | "LButtonDown"
-    | "LButtonUp"
-    | "RButtonDown"
-    | "RButtonUp"
-    | "CompareExpectedResult";
-
 export interface ILine {
     isValid(): boolean;
     isEmpty(): boolean;
@@ -34,11 +12,11 @@ export interface ILine {
  */
 export class ParameterizedLine implements ILine {
     public prefix: string;
-    public module: ModuleName;
-    public lineType: LineType;
+    public module: string;
+    public lineType: string;
     public parameters: Parameter[];
 
-    constructor(module: ModuleName, lineType: LineType, parameters: Parameter[] = [], prefix: string = "") {
+    constructor(module: string, lineType: string, parameters: Parameter[] = [], prefix: string = "") {
         this.prefix = prefix;
         this.module = module;
         this.lineType = lineType;

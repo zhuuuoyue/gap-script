@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { ILine, LineType, ModuleName, ParameterizedLine, RawLine } from "./line";
+import { ILine, ParameterizedLine, RawLine } from "./line";
 import { Parameter } from "./parameter";
 
 const FULL_LINE_PATTERN: RegExp = /^\/\*(\[\d{4}-[\s\d]{1}\d-[\s\d]{1}\d\s[\s\d]{1}\d:[\s\d]{1}\d:[\s\d]{1}\d\([\s\d]{3}\)\])\*\/\s(.*);$/;
@@ -107,8 +107,8 @@ export function parseLine(line: string): ILine {
     if (!pure.startsWith("//")) {
         const matchResult = pure.match(PURE_LINE_PATTERN);
         if (!_.isNull(matchResult)) {
-            const mod: ModuleName = matchResult[1] as ModuleName;
-            const lineType: LineType = matchResult[2] as LineType;
+            const mod: string = matchResult[1];
+            const lineType: string = matchResult[2];
             const parameterLiteral: string = matchResult[3] as string;
             const parameters: Parameter[] = parseParameters(parameterLiteral);
             return new ParameterizedLine(mod, lineType, parameters, prefix);
