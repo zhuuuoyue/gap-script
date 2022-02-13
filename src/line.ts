@@ -24,10 +24,14 @@ export type LineType = ""
 
 export interface ILine {
     isValid(): boolean;
+    isEmpty(): boolean;
     getLiteral(): string;
     clear(): void;
 }
 
+/**
+ * Parameterized line
+ */
 export class ParameterizedLine implements ILine {
     public prefix: string;
     public module: ModuleName;
@@ -43,6 +47,10 @@ export class ParameterizedLine implements ILine {
 
     isValid(): boolean {
         return false;
+    }
+
+    isEmpty(): boolean {
+        return this.prefix.length === 0 && this.module === "" && this.lineType === "" && this.parameters.length === 0;
     }
 
     getLiteral(paramSep: string = ","): string {
@@ -68,6 +76,10 @@ export class ParameterizedLine implements ILine {
     }
 }
 
+/**
+ * Parameter without parameterization
+ * Empty line and comment line should be stored using RawLine.
+ */
 export class RawLine implements ILine {
     public content: string;
 
@@ -79,6 +91,10 @@ export class RawLine implements ILine {
         return true;
     }
     
+    isEmpty(): boolean {
+        return this.content.length === 0;
+    }
+
     getLiteral(): string {
         return this.content;
     }
@@ -87,6 +103,3 @@ export class RawLine implements ILine {
         this.content = "";
     }
 }
-
-export type Line = ParameterizedLine | RawLine;
-export type Lines = Line[];

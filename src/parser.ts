@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { ILine, LineType, ModuleName, ParameterizedLine, RawLine } from "./line";
-import { Parameter, Parameters } from "./parameter";
+import { Parameter } from "./parameter";
 
 const FULL_LINE_PATTERN: RegExp = /^\/\*(\[\d{4}-[\s\d]{1}\d-[\s\d]{1}\d\s[\s\d]{1}\d:[\s\d]{1}\d:[\s\d]{1}\d\([\s\d]{3}\)\])\*\/\s(.*);$/;
 const PURE_LINE_PATTERN: RegExp = /^(Jrn[a-zA-Z]{3}).([a-zA-Z]+)\((.*)\)/;
@@ -19,6 +19,12 @@ function isStringEnd(parameter: string): boolean {
     return !parameter.startsWith("\"") && parameter.endsWith("\"");
 }
 
+/**
+ * Parse parameter
+ * @param parameterLiteral parameter value literal
+ * @param prefix prefix string in front of parameter value literal
+ * @returns parsed parameter
+ */
 function parseParameter(parameterLiteral: string, prefix: string = ""): Parameter {
     let valueLiteral: string = parameterLiteral;
     let comment: string = "";
@@ -36,15 +42,21 @@ function parseParameter(parameterLiteral: string, prefix: string = ""): Paramete
     return new Parameter(valueLiteral, prefix, comment);
 }
 
+/**
+ * Parse parameter literal and return parameter list
+ * @param parameterLiteral a string representing parameter literal
+ * @returns parameters
+ */
 function parseParameters(parameterLiteral: string): Parameter[] {
     let segments: string[] = parameterLiteral.split(PARAMETER_SPLITTER);
     let groups: string[][] = [];
     for (let i = 0; i < segments.length; ++i) {
-        const segment: string = segments[i];
+        let segment: string = segments[i];
         if (isStringBegin(segment)) {
             let temp: string[] = [];
             for (; i < segments.length; ++i) {
-                temp.push(segments[i]);
+                segment = segments[i];
+                temp.push(segment);
                 if (isStringEnd(segment)) {
                     break;
                 }
@@ -61,7 +73,7 @@ function parseParameters(parameterLiteral: string): Parameter[] {
         return [];
     }
 
-    let parameters: Parameters = [parseParameter(segments[0])];
+    let parameters: Parameter[] = [parseParameter(segments[0])];
     let len: number = segments[0].length;
     for (let i = 1; i < segments.length; ++i) {
         ++len;
@@ -77,6 +89,11 @@ function parseParameters(parameterLiteral: string): Parameter[] {
     return parameters;
 }
 
+/**
+ * Parse given line literal and return parsed line
+ * @param line a string representing line literal
+ * @returns parsed line, including parameterized line and raw line
+ */
 export function parseLine(line: string): ILine {
     let prefix: string = "";
     let pure: string = line;
