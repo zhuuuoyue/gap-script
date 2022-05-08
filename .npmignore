@@ -1,6 +1,7 @@
-src/
-tsconfig.json
-.gitignore
-dist/main.js
-dist/main.d.ts
 .vscode/
+src/
+build/
+tsconfig.json
+tsconfig.dist.json
+.gitignore
+.prettierrc

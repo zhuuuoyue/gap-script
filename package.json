@@ -6,8 +6,9 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc",
-    "compile": "tsc --watch",
-    "start": "node dist/main.js"
+    "build:dev": "tsc --watch",
+    "clear": "node scripts/clear.js",
+    "dist": "npm run clear && tsc -p tsconfig.dist.json"
   },
   "repository": {
     "type": "git",

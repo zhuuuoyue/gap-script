@@ -1,6 +1,4 @@
 .vscode/
+build/
 dist/
-dist/main.js
-dist/main.d.ts
 node_modules/
-src/main.ts
